@@ -2,17 +2,44 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ main ]  
 
 jobs:
-
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: build-server
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Print hostname
+      run: hostname
+
+    - name: Build Docker image
+      run : docker buid -t test:v1.
+    
+
+    #- name: Tag Docker image with version
+    #  run: docker tag 51d2ham/polls:latest 51d2ham/polls:v${{ github.run_number }}
+
+    #- name: Docker login
+    #  run: echo "${{ vars.PASSWORD }}" | docker login -u "${{ vars.USERNAME }}" --password-stdin
+
+    #- name: Push latest tag
+    # run: docker push 51d2ham/polls:latest
+
+    #- name: Push version tag
+    #run: docker push 51d2ham/polls:v${{ github.run_number }}
+
+  deploy:
+    runs-on: prod-server 
+    needs: build
+
+    steps:
+    - name: Print hostname
+      run: hostname
+
+    #- name: Pull new Docker image
+    #  run: docker pull 51d2ham/polls:latest
+
+    #- name: Restart containers
+    #  run: docker compose -f /path/to/docker-compose.yml up -d --remove-orphans
