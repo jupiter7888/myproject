@@ -17,18 +17,18 @@ jobs:
     - name: Build Docker image
       run : docker buid -t test:v1.
     
+    
+    - name: Tag Docker image with version
+      run: docker tag dbista71/ecommerce:latest dbista71/ecommerce:v${{ github.run_number }}
 
-    #- name: Tag Docker image with version
-    #  run: docker tag 51d2ham/polls:latest 51d2ham/polls:v${{ github.run_number }}
+    - name: Docker login
+      run: echo "${{vars.PASSWORD }}" | docker login -u "${{ vars.USERNAME }}" --password-stdin
 
-    #- name: Docker login
-    #  run: echo "${{ vars.PASSWORD }}" | docker login -u "${{ vars.USERNAME }}" --password-stdin
+    - name: Push latest tag
+      run: docker push dbista71/ecommerce:latest
 
-    #- name: Push latest tag
-    # run: docker push 51d2ham/polls:latest
-
-    #- name: Push version tag
-    #run: docker push 51d2ham/polls:v${{ github.run_number }}
+    - name: Push version tag
+      run: docker push dbista71/ecommerce:v${{ github.run_number }}
 
   deploy:
     runs-on: prod-server 
@@ -38,8 +38,8 @@ jobs:
     - name: Print hostname
       run: hostname
 
-    #- name: Pull new Docker image
-    #  run: docker pull 51d2ham/polls:latest
+    - name: Pull new Docker image
+      run: docker push dbista71/ecommerce:latest
 
-    #- name: Restart containers
-    #  run: docker compose -f /path/to/docker-compose.yml up -d --remove-orphans
+    - name: Restart containers
+      run: docker compose -f /path/to/docker-compose.yml up -d --remove-orphans
