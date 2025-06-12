@@ -38,7 +38,7 @@ jobs:
     - name: Print hostname
       run: hostname
 
-    - name: Pull new Docker image 
+    - name: Pull new docker image 
       run: docker push dbista71/ecommerce:latest
 
     - name: Restart containers
